@@ -22,17 +22,17 @@
 
     <div class="card mb-4">
         <div class="card-body">
-            <h5 class="card-title" th:if="${minMaxPrice != null and minMaxPrice.카테고리 != null}">카테고리: <span th:text="${minMaxPrice.카테고리}">상의</span></h5>
+            <h5 class="card-title">카테고리: <span th:text="${categoryName}">상의</span></h5>
 
             <div class="row mt-4">
                 <div class="col-md-6">
                     <div class="card bg-light">
                         <div class="card-body">
                             <h6 class="card-subtitle mb-3">최저가 브랜드</h6>
-                            <ul class="list-group" th:if="${minMaxPrice != null and minMaxPrice.최저가 != null}">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${minMaxPrice.최저가}">
-                                    <span th:text="'브랜드: ' + ${item.get('브랜드')}">브랜드: C</span>
-                                    <span class="badge bg-primary rounded-pill" th:text="${item.get('가격')} + '원'">10,000원</span>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${minPrices}">
+                                    <span th:text="'브랜드: ' + ${item['브랜드']}">브랜드: C</span>
+                                    <span class="badge bg-primary rounded-pill" th:text="${item['가격']} + '원'">10,000원</span>
                                 </li>
                             </ul>
                         </div>
@@ -42,10 +42,10 @@
                     <div class="card bg-light">
                         <div class="card-body">
                             <h6 class="card-subtitle mb-3">최고가 브랜드</h6>
-                            <ul class="list-group" th:if="${minMaxPrice != null and minMaxPrice.최고가 != null}">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${minMaxPrice.최고가}">
-                                    <span th:text="'브랜드: ' + ${item.get('브랜드')}">브랜드: I</span>
-                                    <span class="badge bg-danger rounded-pill" th:text="${item.get('가격')} + '원'">11,400원</span>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${maxPrices}">
+                                    <span th:text="'브랜드: ' + ${item['브랜드']}">브랜드: I</span>
+                                    <span class="badge bg-danger rounded-pill" th:text="${item['가격']} + '원'">11,400원</span>
                                 </li>
                             </ul>
                         </div>

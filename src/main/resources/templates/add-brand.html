@@ -32,7 +32,7 @@
 
                 <h6 class="mb-3">카테고리별 가격</h6>
                 <div class="row">
-                    <div class="col-md-6 mb-3" th:each="category : ${T(com.example.model.Category).values()}">
+                    <div class="col-md-6 mb-3" th:each="category : ${categories}">
                         <label th:for="${category.name()}" th:text="${category.displayName}" class="form-label">카테고리명</label>
                         <div class="input-group">
                             <input type="number" class="form-control" th:id="${category.name()}" th:name="${category.name()}" min="0" required>

@@ -40,7 +40,7 @@
                     <tr th:each="item : ${categories}">
                         <td th:text="${item.category}">상의</td>
                         <td th:text="${item.brand}">브랜드명</td>
-                        <td class="text-end" th:text="${#numbers.formatInteger(item.price, 0, 'COMMA')}">10,000</td>
+                        <td class="text-end" th:text="${item.price}">10,000</td>
                     </tr>
                     </tbody>
                     <tfoot>

@@ -33,18 +33,17 @@
                     <thead class="table-dark">
                     <tr>
                         <th>브랜드명</th>
-                        <th th:each="categoryName : ${categoryNames}" th:text="${categoryName}">카테고리</th>
+                        <th th:each="category : ${categories}" th:text="${category.displayName}">카테고리</th>
                         <th>관리</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="brand : ${brands}">
                         <td th:text="${brand.name}">브랜드명</td>
-                        <td th:each="categoryName : ${categoryNames}"
-                            class="text-end"
-                            th:with="category=${T(com.example.model.Category).fromDisplayName(categoryName)}"
-                            th:text="${brand.prices != null && brand.prices.get(category) != null ? #numbers.formatInteger(brand.prices.get(category), 0, 'COMMA') : '-'}">
-                            10,000
+                        <td th:each="category : ${categories}" class="text-end">
+                                    <span th:if="${brand.prices != null && brand.prices.containsKey(category)}"
+                                          th:text="${#numbers.formatInteger(brand.prices.get(category), 0, 'COMMA')}">10,000</span>
+                            <span th:unless="${brand.prices != null && brand.prices.containsKey(category)}">-</span>
                         </td>
                         <td>
                             <a th:href="@{/edit-brand(id=${brand.id})}" class="btn btn-sm btn-primary">

@@ -28,7 +28,7 @@
 
     <div class="error-container">
         <h2 class="text-danger">처리 중 오류가 발생했습니다</h2>
-        <p class="lead" th:text="${error}">오류 메시지</p>
+        <p class="lead" th:text="${error != null} ? ${error} : '오류가 발생했습니다. 다시 시도해주세요.'">오류 메시지</p>
         <div class="mt-4">
             <a href="javascript:history.back()" class="btn btn-secondary">이전 페이지로 돌아가기</a>
             <a href="/" class="btn btn-primary ms-2">홈으로</a>

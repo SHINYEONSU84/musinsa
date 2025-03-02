@@ -27,9 +27,9 @@
   <div class="card">
     <div class="card-body">
       <h5 class="card-title">단일 브랜드로 모든 카테고리 상품 구매 시 최저가격 브랜드</h5>
-      <h6 class="card-subtitle mb-3 text-muted" th:if="${lowestTotalPriceBrand != null and lowestTotalPriceBrand.최저가 != null}" th:text="'브랜드: ' + ${lowestTotalPriceBrand.최저가.브랜드}">브랜드: D</h6>
+      <h6 class="card-subtitle mb-3 text-muted" th:text="'브랜드: ' + ${brandName}">브랜드: D</h6>
 
-      <div class="table-responsive" th:if="${lowestTotalPriceBrand != null and lowestTotalPriceBrand.최저가 != null and lowestTotalPriceBrand.최저가.카테고리 != null}">
+      <div class="table-responsive">
         <table class="table table-striped table-bordered">
           <thead class="table-dark">
           <tr>
@@ -38,15 +38,15 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="item : ${lowestTotalPriceBrand.최저가.카테고리}">
-            <td th:text="${item.get('카테고리')}">상의</td>
-            <td class="text-end" th:text="${item.get('가격')}">10,100</td>
+          <tr th:each="item : ${categories}">
+            <td th:text="${item['카테고리']}">상의</td>
+            <td class="text-end" th:text="${item['가격']}">10,100</td>
           </tr>
           </tbody>
           <tfoot>
           <tr class="table-footer">
             <td class="text-end">총액</td>
-            <td class="text-end" th:text="${lowestTotalPriceBrand.최저가.총액}">36,100</td>
+            <td class="text-end" th:text="${totalPrice}">36,100</td>
           </tr>
           </tfoot>
         </table>
