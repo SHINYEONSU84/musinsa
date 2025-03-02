@@ -1,51 +1,51 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"> <!-- Thymeleaf 템플릿 엔진 네임스페이스 선언 -->
 <head>
-    <meta charset="UTF-8">
-    <title>카테고리별 최저/최고 가격 결과</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta charset="UTF-8"> <!-- 문자 인코딩 설정 -->
+    <title>카테고리별 최저/최고 가격 결과</title> <!-- 페이지 제목 설정 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap 5 CSS 로드 -->
     <style>
         body {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
+            padding-top: 2rem; /* 본문 상단 여백 */
+            padding-bottom: 2rem; /* 본문 하단 여백 */
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <header class="pb-3 mb-4 border-bottom">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1 class="display-5 fw-bold">카테고리별 최저/최고 가격 결과</h1>
-            <a href="/" class="btn btn-outline-primary">홈으로</a>
+<div class="container"> <!-- Bootstrap 컨테이너 시작 -->
+    <header class="pb-3 mb-4 border-bottom"> <!-- 헤더 섹션 -->
+        <div class="d-flex justify-content-between align-items-center"> <!-- 양쪽 정렬 레이아웃 -->
+            <h1 class="display-5 fw-bold">카테고리별 최저/최고 가격 결과</h1> <!-- 페이지 주제 -->
+            <a href="/" class="btn btn-outline-primary">홈으로</a> <!-- 홈으로 이동 버튼 -->
         </div>
     </header>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">카테고리: <span th:text="${categoryName}">상의</span></h5>
+    <div class="card mb-4"> <!-- 카드 컴포넌트 시작 (하단 마진 적용) -->
+        <div class="card-body"> <!-- 카드 내용 영역 -->
+            <h5 class="card-title">카테고리: <span th:text="${categoryName}">상의</span></h5> <!-- 카드 제목: 선택된 카테고리명 표시 -->
 
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card bg-light">
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-3">최저가 브랜드</h6>
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${minPrices}">
-                                    <span th:text="'브랜드: ' + ${item['브랜드']}">브랜드: C</span>
-                                    <span class="badge bg-primary rounded-pill" th:text="${item['가격']} + '원'">10,000원</span>
+            <div class="row mt-4"> <!-- 그리드 행 시작 (상단 마진 적용) -->
+                <div class="col-md-6"> <!-- 왼쪽 열 (중간 크기 디바이스에서 화면의 절반 차지) -->
+                    <div class="card bg-light"> <!-- 연한 배경색 내부 카드 -->
+                        <div class="card-body"> <!-- 카드 내용 영역 -->
+                            <h6 class="card-subtitle mb-3">최저가 브랜드</h6> <!-- 최저가 섹션 부제목 -->
+                            <ul class="list-group"> <!-- 리스트 그룹 시작 -->
+                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${minPrices}"> <!-- 각 최저가 항목에 대해 반복, 양쪽 정렬 -->
+                                    <span th:text="'브랜드: ' + ${item['브랜드']}">브랜드: C</span> <!-- 브랜드명 표시 -->
+                                    <span class="badge bg-primary rounded-pill" th:text="${item['가격']} + '원'">10,000원</span> <!-- 가격을 파란색 배지로 표시 -->
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="card bg-light">
-                        <div class="card-body">
-                            <h6 class="card-subtitle mb-3">최고가 브랜드</h6>
-                            <ul class="list-group">
-                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${maxPrices}">
-                                    <span th:text="'브랜드: ' + ${item['브랜드']}">브랜드: I</span>
-                                    <span class="badge bg-danger rounded-pill" th:text="${item['가격']} + '원'">11,400원</span>
+                <div class="col-md-6"> <!-- 오른쪽 열 -->
+                    <div class="card bg-light"> <!-- 연한 배경색 내부 카드 -->
+                        <div class="card-body"> <!-- 카드 내용 영역 -->
+                            <h6 class="card-subtitle mb-3">최고가 브랜드</h6> <!-- 최고가 섹션 부제목 -->
+                            <ul class="list-group"> <!-- 리스트 그룹 시작 -->
+                                <li class="list-group-item d-flex justify-content-between align-items-center" th:each="item : ${maxPrices}"> <!-- 각 최고가 항목에 대해 반복, 양쪽 정렬 -->
+                                    <span th:text="'브랜드: ' + ${item['브랜드']}">브랜드: I</span> <!-- 브랜드명 표시 -->
+                                    <span class="badge bg-danger rounded-pill" th:text="${item['가격']} + '원'">11,400원</span> <!-- 가격을 빨간색 배지로 표시 -->
                                 </li>
                             </ul>
                         </div>
@@ -55,16 +55,16 @@
         </div>
     </div>
 
-    <div class="mt-4">
-        <a href="/min-max-price-by-category" class="btn btn-primary">다른 카테고리 조회</a>
-        <a href="/" class="btn btn-secondary ms-2">홈으로</a>
+    <div class="mt-4"> <!-- 버튼 영역 (상단 마진 적용) -->
+        <a href="/min-max-price-by-category" class="btn btn-primary">다른 카테고리 조회</a> <!-- 카테고리 선택 페이지로 돌아가는 버튼 -->
+        <a href="/" class="btn btn-secondary ms-2">홈으로</a> <!-- 홈으로 이동 버튼 (좌측 마진 적용) -->
     </div>
 
-    <footer class="pt-3 mt-4 text-muted border-top">
-        &copy; 2025 무신사 코디 서비스
+    <footer class="pt-3 mt-4 text-muted border-top"> <!-- 푸터 섹션 -->
+        &copy; 2025 무신사 코디 서비스 <!-- 저작권 정보 -->
     </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap 5 JS 로드 -->
 </body>
 </html>

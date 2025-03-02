@@ -10,11 +10,37 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * 브랜드와 관련된 비즈니스 로직을 처리하는 서비스 클래스
+ *
+ * 무신사 코디 서비스의 핵심 비즈니스 로직을 구현하며, 브랜드 관리와 관련된 기능을 제공한다.
+ * 데이터 접근을 위해 BrandRepository와 상호작용하고, 컨트롤러 계층에 필요한 데이터를 가공한다.
+ *
+ * 주요 기능:
+ * 1. 브랜드 CRUD 작업 (생성, 조회, 수정, 삭제)
+ * 2. 카테고리별 최저가격 브랜드와 상품가격, 총액 조회
+ * 3. 단일 브랜드 최저 총액 조회
+ * 4. 카테고리별 최저/최고 가격 브랜드 조회
+ * 5. 초기 브랜드 데이터 설정
+ */
 @Service
 public class BrandService {
+
+    /**
+     * 브랜드 데이터에 접근하기 위한 리포지토리 인스턴스
+     * Spring의 의존성 주입(DI)을 통해 자동으로 주입된다.
+     */
     @Autowired
     private BrandRepository brandRepository;
 
+    /**
+     * 애플리케이션 시작 시 초기 브랜드 데이터를 설정하는 메서드
+     *
+     * 데이터베이스에 브랜드가 없는 경우에만 기본 브랜드 데이터를 생성한다.
+     * 브랜드 A부터 I까지 9개의 브랜드를 생성하고, 각 브랜드별로 8개 카테고리의 가격 정보를 설정한다.
+     *
+     * @Transactional 어노테이션으로 트랜잭션 처리를 보장한다.
+     */
     @Transactional
     public void initializeBrands() {
         // 초기 브랜드 데이터가 없을 경우에만 초기화
@@ -138,40 +164,88 @@ public class BrandService {
         }
     }
 
+    /**
+     * 모든 브랜드 목록을 조회하는 메서드
+     *
+     * @return 모든 브랜드 목록
+     */
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
     }
 
+    /**
+     * 특정 ID에 해당하는 브랜드를 조회하는 메서드
+     *
+     * @param id 조회할 브랜드의 ID
+     * @return 해당 ID의 브랜드 (존재하지 않는 경우 null)
+     */
     public Brand getBrandById(Long id) {
         return brandRepository.findById(id).orElse(null);
     }
 
+    /**
+     * 특정 이름에 해당하는 브랜드를 조회하는 메서드
+     *
+     * @param name 조회할 브랜드의 이름
+     * @return 해당 이름의 브랜드 (존재하지 않는 경우 null)
+     */
     public Brand getBrandByName(String name) {
         return brandRepository.findByName(name);
     }
 
+    /**
+     * 브랜드를 저장하는 메서드 (생성 또는 수정)
+     *
+     * @param brand 저장할 브랜드 객체
+     * @return 저장된 브랜드 객체
+     */
     @Transactional
     public Brand saveBrand(Brand brand) {
         return brandRepository.save(brand);
     }
 
+    /**
+     * 브랜드를 삭제하는 메서드
+     *
+     * @param id 삭제할 브랜드의 ID
+     */
     @Transactional
     public void deleteBrand(Long id) {
         brandRepository.deleteById(id);
     }
 
+    /**
+     * 특정 카테고리의 브랜드들을 가격 오름차순으로 조회하는 메서드
+     *
+     * @param category 조회할 카테고리
+     * @return 해당 카테고리의 브랜드들을 가격 오름차순으로 정렬한 목록
+     */
     public List<Brand> getBrandsByCategoryOrderByPriceAsc(Category category) {
         return brandRepository.findAllByCategoryOrderByPriceAsc(category);
     }
 
+    /**
+     * 특정 카테고리의 브랜드들을 가격 내림차순으로 조회하는 메서드
+     *
+     * @param category 조회할 카테고리
+     * @return 해당 카테고리의 브랜드들을 가격 내림차순으로 정렬한 목록
+     */
     public List<Brand> getBrandsByCategoryOrderByPriceDesc(Category category) {
         return brandRepository.findAllByCategoryOrderByPriceDesc(category);
     }
 
-    // API 1: 카테고리별 최저가격 브랜드와 상품가격, 총액을 조회
+    /**
+     * API 1: 카테고리별 최저가격 브랜드와 상품가격, 총액을 조회하는 메서드
+     *
+     * 각 카테고리별로 최저 가격을 제공하는 브랜드와 가격 정보를 맵 형태로 반환한다.
+     * 같은 최저가격을 제공하는 브랜드가 여러 개인 경우, 모든 브랜드를 콤마로 구분하여 표시한다.
+     *
+     * @return 카테고리를 키로, 브랜드와 가격 정보를 값으로 하는 맵
+     */
     public Map<Category, Map<String, Object>> getLowestPriceByCategory() {
         Map<Category, Map<String, Object>> result = new HashMap<>();
 
+        // 각 카테고리별로 최저가격 브랜드 조회
         for (Category category : Category.values()) {
             List<Brand> brands = getBrandsByCategoryOrderByPriceAsc(category);
             if (!brands.isEmpty()) {
@@ -189,6 +263,7 @@ public class BrandService {
                     }
                 }
 
+                // 결과 맵에 브랜드와 가격 정보 저장
                 Map<String, Object> categoryData = new HashMap<>();
                 categoryData.put("brand", String.join(",", lowestPriceBrands));
                 categoryData.put("price", lowestPrice);
@@ -199,12 +274,20 @@ public class BrandService {
         return result;
     }
 
-    // API 2: 단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격 브랜드 조회
+    /**
+     * API 2: 단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격 브랜드를 조회하는 메서드
+     *
+     * 모든 브랜드를 검사하여 각 브랜드의 총 가격을 계산하고,
+     * 그 중 최저 총액을 제공하는 브랜드와 카테고리별 가격, 총액 정보를 반환한다.
+     *
+     * @return 최저 총액 브랜드 정보를 포함한 맵
+     */
     public Map<String, Object> getLowestTotalPriceBrand() {
         List<Brand> brands = getAllBrands();
         Brand lowestTotalPriceBrand = null;
         int lowestTotalPrice = Integer.MAX_VALUE;
 
+        // 모든 브랜드의 총 가격을 계산하고 최저가 브랜드 찾기
         for (Brand brand : brands) {
             int totalPrice = calculateTotalPrice(brand);
             if (totalPrice < lowestTotalPrice) {
@@ -213,6 +296,7 @@ public class BrandService {
             }
         }
 
+        // 결과 맵 구성
         Map<String, Object> result = new HashMap<>();
         if (lowestTotalPriceBrand != null) {
             // LinkedHashMap을 사용해 필드 순서 유지
@@ -220,6 +304,7 @@ public class BrandService {
             // 요구사항 순서대로 추가: 브랜드, 카테고리, 총액
             brandInfo.put("브랜드", lowestTotalPriceBrand.getName());
 
+            // 카테고리별 가격 정보 목록 생성
             List<Map<String, String>> categoryPrices = new ArrayList<>();
             for (Category category : Category.values()) {
                 Map<String, String> categoryPrice = new LinkedHashMap<>();
@@ -239,18 +324,36 @@ public class BrandService {
         return result;
     }
 
+    /**
+     * 브랜드의 전체 카테고리 상품 가격 총액을 계산하는 내부 메서드
+     *
+     * @param brand 총액을 계산할 브랜드
+     * @return 해당 브랜드의 모든 카테고리 상품 가격 총액
+     */
     private int calculateTotalPrice(Brand brand) {
+        // 스트림 API를 사용하여 모든 카테고리의 가격을 합산
         return brand.getPrices().values().stream().mapToInt(Integer::intValue).sum();
     }
 
-    // API 3: 카테고리 이름으로 최저, 최고 가격 브랜드와 상품 가격을 조회
+    /**
+     * API 3: 카테고리 이름으로 최저, 최고 가격 브랜드와 상품 가격을 조회하는 메서드
+     *
+     * 지정된 카테고리에 대해 최저가 및 최고가 브랜드와 가격 정보를 조회한다.
+     * 같은 가격을 제공하는 브랜드가 여러 개인 경우 모두 포함한다.
+     *
+     * @param category 조회할 카테고리
+     * @return 카테고리, 최저가, 최고가 정보를 포함한 맵
+     */
     public Map<String, Object> getMinMaxPriceByCategory(Category category) {
+        // 해당 카테고리의 브랜드를 가격 오름차순과 내림차순으로 조회
         List<Brand> brandsAsc = getBrandsByCategoryOrderByPriceAsc(category);
         List<Brand> brandsDesc = getBrandsByCategoryOrderByPriceDesc(category);
 
         Map<String, Object> result = new HashMap<>();
+        // 카테고리 이름 설정
         result.put("카테고리", category.getDisplayName());
 
+        // 최저가 브랜드 정보 추가
         if (!brandsAsc.isEmpty()) {
             Brand minPriceBrand = brandsAsc.get(0);
             int minPrice = minPriceBrand.getPrices().get(category);
@@ -274,6 +377,7 @@ public class BrandService {
             result.put("최저가", minPriceList);
         }
 
+        // 최고가 브랜드 정보 추가
         if (!brandsDesc.isEmpty()) {
             Brand maxPriceBrand = brandsDesc.get(0);
             int maxPrice = maxPriceBrand.getPrices().get(category);
@@ -300,7 +404,16 @@ public class BrandService {
         return result;
     }
 
-    // API 4: 브랜드 가격 업데이트
+    /**
+     * API 4: 브랜드 가격을 업데이트하는 메서드
+     *
+     * 지정된 브랜드명과 카테고리에 해당하는 상품의 가격을 업데이트한다.
+     *
+     * @param brandName 업데이트할 브랜드의 이름
+     * @param category 업데이트할 카테고리
+     * @param price 새로운 가격
+     * @return 업데이트된 브랜드 객체 (브랜드가 존재하지 않는 경우 null)
+     */
     @Transactional
     public Brand updateBrandPrice(String brandName, Category category, int price) {
         Brand brand = getBrandByName(brandName);

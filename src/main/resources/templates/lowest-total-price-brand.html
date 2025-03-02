@@ -1,52 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"> <!-- Thymeleaf 템플릿 엔진 네임스페이스 선언 -->
 <head>
-  <meta charset="UTF-8">
-  <title>단일 브랜드 최저 총액 조회</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="UTF-8"> <!-- 문자 인코딩 설정 -->
+  <title>단일 브랜드 최저 총액 조회</title> <!-- 페이지 제목 설정 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- Bootstrap 5 CSS 로드 -->
   <style>
     body {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-top: 2rem; /* 본문 상단 여백 */
+        padding-bottom: 2rem; /* 본문 하단 여백 */
     }
     .table-footer {
-        font-weight: bold;
-        background-color: #f8f9fa;
+        font-weight: bold; /* 테이블 푸터 글자 굵게 */
+        background-color: #f8f9fa; /* 테이블 푸터 배경색 (연한 회색) */
     }
   </style>
 </head>
 <body>
-<div class="container">
-  <header class="pb-3 mb-4 border-bottom">
-    <div class="d-flex justify-content-between align-items-center">
-      <h1 class="display-5 fw-bold">단일 브랜드 최저 총액 조회</h1>
-      <a href="/" class="btn btn-outline-primary">홈으로</a>
+<div class="container"> <!-- Bootstrap 컨테이너 시작 -->
+  <header class="pb-3 mb-4 border-bottom"> <!-- 헤더 섹션 -->
+    <div class="d-flex justify-content-between align-items-center"> <!-- 양쪽 정렬 레이아웃 -->
+      <h1 class="display-5 fw-bold">단일 브랜드 최저 총액 조회</h1> <!-- 페이지 주제 -->
+      <a href="/" class="btn btn-outline-primary">홈으로</a> <!-- 홈으로 이동 버튼 -->
     </div>
   </header>
 
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">단일 브랜드로 모든 카테고리 상품 구매 시 최저가격 브랜드</h5>
-      <h6 class="card-subtitle mb-3 text-muted" th:text="'브랜드: ' + ${brandName}">브랜드: D</h6>
+  <div class="card"> <!-- 카드 컴포넌트 시작 -->
+    <div class="card-body"> <!-- 카드 내용 영역 -->
+      <h5 class="card-title">단일 브랜드로 모든 카테고리 상품 구매 시 최저가격 브랜드</h5> <!-- 카드 제목 -->
+      <h6 class="card-subtitle mb-3 text-muted" th:text="'브랜드: ' + ${brandName}">브랜드: D</h6> <!-- 카드 부제목: 브랜드명 -->
 
-      <div class="table-responsive">
-        <table class="table table-striped table-bordered">
-          <thead class="table-dark">
+      <div class="table-responsive"> <!-- 반응형 테이블 컨테이너 -->
+        <table class="table table-striped table-bordered"> <!-- 스트라이프 및 테두리가 있는 테이블 -->
+          <thead class="table-dark"> <!-- 어두운 배경의 테이블 헤더 -->
           <tr>
-            <th>카테고리</th>
-            <th>가격</th>
+            <th>카테고리</th> <!-- 카테고리 열 헤더 -->
+            <th>가격</th> <!-- 가격 열 헤더 -->
           </tr>
           </thead>
           <tbody>
-          <tr th:each="item : ${categories}">
-            <td th:text="${item['카테고리']}">상의</td>
-            <td class="text-end" th:text="${item['가격']}">10,100</td>
+          <tr th:each="item : ${categories}"> <!-- 각 카테고리 항목에 대해 행 반복 -->
+            <td th:text="${item['카테고리']}">상의</td> <!-- 카테고리명 셀 (맵 키로 접근) -->
+            <td class="text-end" th:text="${item['가격']}">10,100</td> <!-- 가격 셀 (맵 키로 접근, 우측 정렬) -->
           </tr>
           </tbody>
           <tfoot>
-          <tr class="table-footer">
-            <td class="text-end">총액</td>
-            <td class="text-end" th:text="${totalPrice}">36,100</td>
+          <tr class="table-footer"> <!-- 커스텀 스타일의 테이블 푸터 행 -->
+            <td class="text-end">총액</td> <!-- 총액 라벨 셀 (우측 정렬) -->
+            <td class="text-end" th:text="${totalPrice}">36,100</td> <!-- 총액 값 셀 (우측 정렬) -->
           </tr>
           </tfoot>
         </table>
@@ -54,15 +54,15 @@
     </div>
   </div>
 
-  <div class="mt-4">
-    <a href="/" class="btn btn-primary">홈으로</a>
+  <div class="mt-4"> <!-- 버튼 영역 (상단 마진 적용) -->
+    <a href="/" class="btn btn-primary">홈으로</a> <!-- 홈으로 이동 버튼 -->
   </div>
 
-  <footer class="pt-3 mt-4 text-muted border-top">
-    &copy; 2025 무신사 코디 서비스
+  <footer class="pt-3 mt-4 text-muted border-top"> <!-- 푸터 섹션 -->
+    &copy; 2025 무신사 코디 서비스 <!-- 저작권 정보 -->
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap 5 JS 로드 -->
 </body>
 </html>
