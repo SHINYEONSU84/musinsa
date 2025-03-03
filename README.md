@@ -18,10 +18,10 @@
   - 특정 카테고리에서 최저가와 최고가를 제공하는 브랜드 및 가격 정보 조회
   - 동일한 가격을 제공하는 브랜드가 여러 개인 경우 모두 표시
 
-- **API 4**: 브랜드 관리 API
-  - 브랜드 생성 (`POST /api/brand`)
-  - 브랜드 수정 (`PUT /api/brand/{id}`)
-  - 브랜드 삭제 (`DELETE /api/brand/{id}`)
+- **API 4**: 브랜드 및 상품 관리 API
+  - 브랜드 및 상품 생성 (`POST /api/brand`)
+  - 브랜드 및 상품 수정 (`PUT /api/brand/{id}`)
+  - 브랜드 및 상품 삭제 (`DELETE /api/brand/{id}`)
   - 특정 브랜드의 특정 카테고리 가격 업데이트 (`PUT /api/brand/price`)
 
 ### 2. 웹 인터페이스 구현
@@ -91,7 +91,11 @@ java -jar build/libs/brand-shopping-1.0.0.jar
     {"category": "상의", "brand": "C", "price": "10,000"},
     {"category": "아우터", "brand": "E", "price": "5,000"},
     {"category": "바지", "brand": "D", "price": "3,000"},
-    ...
+    {"category": "스니커즈", "brand": "A,G", "price": "9,000"},
+    {"category": "가방", "brand": "A", "price": "2,000"},
+    {"category": "모자", "brand": "D", "price": "1,500"},
+    {"category": "양말", "brand": "I", "price": "1,700"},
+    {"category": "액세서리", "brand": "F", "price": "1,900"}
   ],
   "totalPrice": "34,100"
 }
@@ -108,7 +112,12 @@ java -jar build/libs/brand-shopping-1.0.0.jar
     "카테고리": [
       {"카테고리": "상의", "가격": "10,100"},
       {"카테고리": "아우터", "가격": "5,100"},
-      ...
+      {"카테고리": "바지", "가격": "3,000"},
+      {"카테고리": "스니커즈", "가격": "9,500"},
+      {"카테고리": "가방", "가격": "2,500"},
+      {"카테고리": "모자", "가격": "1,500"},
+      {"카테고리": "양말", "가격": "2,400"},
+      {"카테고리": "액세서리", "가격": "2,000"}
     ],
     "총액": "36,100"
   }
@@ -150,9 +159,12 @@ src/
 │   │           │   ├── BrandDto.java
 │   │           │   ├── BrandPriceUpdateDto.java
 │   │           │   ├── CategoryPriceDto.java
+│   │           │   ├── ErrorResponse.java
 │   │           │   ├── LowestPriceResponseDto.java
 │   │           │   ├── LowestTotalPriceResponseDto.java
 │   │           │   └── MinMaxPriceResponseDto.java
+│   │           ├── exception/
+│   │           │   └── GlobalExceptionHandler.java
 │   │           ├── model/
 │   │           │   ├── Brand.java
 │   │           │   └── Category.java
