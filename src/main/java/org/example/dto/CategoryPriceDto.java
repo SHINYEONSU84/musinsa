@@ -6,16 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * 카테고리별 최저가격 정보를 전송하기 위한 데이터 전송 객체(DTO)
- *
+ * 클래스 설명 : 카테고리별 최저가격 정보를 전송하기 위한 데이터 전송 객체(DTO)
  * API 1(카테고리별 최저가격 조회)의 응답에 사용된다.
  * 카테고리 이름, 브랜드 이름, 가격 정보를 포함한다.
+ * 작성자 : sys1021
+ * 작성일 : 2025.03.02
  */
 @Data               // Lombok: getter, setter, equals, hashCode, toString 자동 생성
 @NoArgsConstructor  // Lombok: 파라미터 없는 기본 생성자 자동 생성
 @AllArgsConstructor // Lombok: 모든 필드를 파라미터로 받는 생성자 자동 생성
 @Builder            // Lombok: 빌더 패턴 구현을 자동으로 생성
 public class CategoryPriceDto {
+
     /**
      * 카테고리 이름
      * 예: "상의", "아우터", "바지" 등
@@ -37,4 +39,5 @@ public class CategoryPriceDto {
      * API 1(카테고리별 최저가격 조회) 응답의 가격 필드로 사용된다.
      */
     private String price;
+
 }

@@ -1,50 +1,45 @@
-//plugins {
-//    id 'java'
-//}
-//
-//group = 'org.example'
-//version = '1.0-SNAPSHOT'
-//
-//repositories {
-//    mavenCentral()
-//}
-//
-//dependencies {
-//    testImplementation platform('org.junit:junit-bom:5.10.0')
-//    testImplementation 'org.junit.jupiter:junit-jupiter'
-//}
-//
-//test {
-//    useJUnitPlatform()
-//}
-
+// Gradle 플러그인 설정
 plugins {
+    // Spring Boot 플러그인: Spring Boot 애플리케이션을 쉽게 빌드하고 실행할 수 있도록 지원
     id 'org.springframework.boot' version '3.1.0'
+
+    // Spring의 의존성 관리를 자동으로 수행하는 플러그인
     id 'io.spring.dependency-management' version '1.1.0'
+
+    // Java 프로젝트로 설정
     id 'java'
 }
 
-group = 'com.example'
-version = '1.0.0'
-sourceCompatibility = '17'
+// 프로젝트의 그룹 ID 및 버전 설정
+group = 'org.example' // 프로젝트의 기본 패키지 명칭
+version = '1.0.0'     // 애플리케이션 버전
 
+// Java 소스 코드의 호환 버전 설정
+sourceCompatibility = '17' // Java 17을 사용
+
+// 의존성 다운로드를 위한 저장소 설정
 repositories {
-    mavenCentral()
+    mavenCentral() // Maven 중앙 저장소 사용
 }
 
+// 프로젝트에서 사용할 의존성 선언
 dependencies {
+    // Spring Boot Web Starter: 웹 애플리케이션 개발을 위한 필수 라이브러리 포함 (Spring MVC, Embedded Tomcat 등)
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Thymeleaf Starter: Spring Boot와 Thymeleaf 통합을 지원하는 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // Spring Data JPA Starter: JPA 사용을 위한 필수 라이브러리 포함 (Hibernate 기본 제공)
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // H2 Database: 로컬 환경에서 사용할 인메모리 데이터베이스
     runtimeOnly 'com.h2database:h2'
-
-    // Lombok 추가
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-
+    // Lombok: 보일러플레이트 코드를 줄여주는 라이브러리 (getter, setter, 생성자 자동 생성 등)
+    compileOnly 'org.projectlombok:lombok' // 컴파일 시에만 적용됨
+    annotationProcessor 'org.projectlombok:lombok' // 어노테이션 처리기 등록
+    // Spring Boot Test Starter: 테스트를 위한 기본적인 라이브러리 포함 (JUnit 5 지원)
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
+// 테스트 설정
 tasks.named('test') {
-    useJUnitPlatform()
+    useJUnitPlatform() // JUnit 5 (JUnit Platform) 사용
 }

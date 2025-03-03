@@ -8,16 +8,18 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * API 1(카테고리별 최저가격 조회)의 응답 데이터를 담는 데이터 전송 객체(DTO)
- *
+ * 클래스 설명 : API 1(카테고리별 최저가격 조회)의 응답 데이터를 담는 데이터 전송 객체(DTO)
  * 각 카테고리별 최저가격 브랜드와 가격 정보를 리스트 형태로 포함하고,
  * 모든 카테고리 최저가의 총합을 함께 제공한다.
+ * 작성자 : sys1021
+ * 작성일 : 2025.03.02
  */
 @Data               // Lombok: getter, setter, equals, hashCode, toString 자동 생성
 @NoArgsConstructor  // Lombok: 파라미터 없는 기본 생성자 자동 생성
 @AllArgsConstructor // Lombok: 모든 필드를 파라미터로 받는 생성자 자동 생성
 @Builder            // Lombok: 빌더 패턴 구현을 자동으로 생성
 public class LowestPriceResponseDto {
+
     /**
      * 카테고리별 최저가격 정보 목록
      * 각 카테고리에 대해 최저가를 제공하는 브랜드와 가격 정보를 포함한다.
@@ -31,4 +33,5 @@ public class LowestPriceResponseDto {
      * API 1(카테고리별 최저가격 조회) 응답의 총액 필드로 사용된다.
      */
     private String totalPrice;
+
 }

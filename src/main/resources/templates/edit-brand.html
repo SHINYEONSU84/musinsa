@@ -39,7 +39,7 @@
                         <div class="input-group"> <!-- 입력 그룹 -->
                             <input type="number" class="form-control" th:id="${category.name()}" th:name="${category.name()}"
                                    th:value="${brand.prices != null && brand.prices.containsKey(category) ? brand.prices.get(category) : 0}"
-                                   min="0" required> <!-- 가격 입력 필드: 기존 가격이 있으면 표시, 없으면 0 -->
+                                   min="0" max="2147483647" required> <!-- 가격 입력 필드: 기존 가격이 있으면 표시, 없으면 0 -->
                             <span class="input-group-text">원</span> <!-- 입력 필드 접미사 -->
                         </div>
                     </div>

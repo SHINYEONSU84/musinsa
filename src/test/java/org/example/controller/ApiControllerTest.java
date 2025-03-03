@@ -29,11 +29,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
- * ApiController 클래스의 단위 테스트
- *
+ * 클래스 설명 : ApiController 클래스의 단위 테스트
  * @WebMvcTest 어노테이션은 스프링 MVC 컴포넌트에 초점을 맞춘 테스트로,
  * 전체 애플리케이션 컨텍스트를 로드하지 않고 웹 레이어 관련 빈만 로드하여 테스트 속도를 높인다.
  * ApiController만 테스트 대상으로 지정하여 다른 컨트롤러는 로드하지 않는다.
+ * 작성자 : sys1021
+ * 작성일 : 2025.03.02
  */
 @WebMvcTest(ApiController.class)
 public class ApiControllerTest {
@@ -85,6 +86,7 @@ public class ApiControllerTest {
      * 브랜드 A를 생성하고 각 카테고리별 가격을 설정한다.
      */
     private void setupTestBrands() {
+
         brandA = new Brand();
         brandA.setId(1L);
         brandA.setName("A");
@@ -96,13 +98,15 @@ public class ApiControllerTest {
         brandA.getPrices().put(Category.HAT, 1700);       // 모자 가격
         brandA.getPrices().put(Category.SOCKS, 1800);     // 양말 가격
         brandA.getPrices().put(Category.ACCESSORY, 2300); // 액세서리 가격
+
     }
 
     /**
-     * API 1: 카테고리별 최저가격 데이터 설정
+     * API 1 카테고리별 최저가격 데이터 설정
      * 모든 카테고리에 대해 최저가격 브랜드와 가격 정보를 맵 형태로 구성한다.
      */
     private void setupLowestPriceByCategory() {
+
         lowestPriceByCategory = new HashMap<>();
         for (Category category : Category.values()) {
             Map<String, Object> categoryData = new HashMap<>();
@@ -117,14 +121,16 @@ public class ApiControllerTest {
             categoryData.put("price", 10000);
             lowestPriceByCategory.put(category, categoryData);
         }
+
     }
 
     /**
-     * API 2: 최저 총액 브랜드 데이터 설정
+     * API 2 최저 총액 브랜드 데이터 설정
      * 단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격인 브랜드와 총액 정보를 맵 형태로 구성한다.
      * LinkedHashMap을 사용하여 삽입 순서를 유지한다.
      */
     private void setupLowestTotalPriceBrand() {
+
         lowestTotalPriceBrand = new LinkedHashMap<>();
         Map<String, Object> brandInfo = new LinkedHashMap<>();
         brandInfo.put("브랜드", "D");
@@ -140,13 +146,15 @@ public class ApiControllerTest {
         brandInfo.put("카테고리", categoryPrices);
         brandInfo.put("총액", "36,100"); // 천 단위 구분자(콤마) 포함
         lowestTotalPriceBrand.put("최저가", brandInfo);
+
     }
 
     /**
-     * API 3: 카테고리별 최저/최고 가격 데이터 설정
+     * API 3 카테고리별 최저/최고 가격 데이터 설정
      * 특정 카테고리(상의)에 대한 최저가격 브랜드와 최고가격 브랜드 정보를 맵 형태로 구성한다.
      */
     private void setupMinMaxPriceByCategory() {
+
         minMaxPriceByCategory = new HashMap<>();
         minMaxPriceByCategory.put("카테고리", "상의");
 
@@ -165,11 +173,11 @@ public class ApiControllerTest {
         maxPriceInfo.put("가격", "11,400");
         maxPriceList.add(maxPriceInfo);
         minMaxPriceByCategory.put("최고가", maxPriceList);
+
     }
 
     /**
      * API 1: 카테고리별 최저가격 브랜드와 상품가격 조회 테스트
-     *
      * GET /api/lowest-price-by-category 엔드포인트가 올바른 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 200(OK)
      * - 응답 JSON에 categories 배열과 totalPrice 포함
@@ -178,6 +186,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 1: 카테고리별 최저가격 브랜드와 상품가격 조회")
     void getLowestPriceByCategory_ShouldReturnLowestPriceForEachCategory() throws Exception {
+
         // given: 서비스 메서드가 호출될 때 반환할 값을 모킹
         when(brandService.getLowestPriceByCategory()).thenReturn(lowestPriceByCategory);
 
@@ -194,11 +203,11 @@ public class ApiControllerTest {
 
         // 서비스 메서드가 정확히 한 번 호출되었는지 확인
         verify(brandService, times(1)).getLowestPriceByCategory();
+
     }
 
     /**
      * API 1: 서비스 예외 발생 시 오류 응답 반환 테스트
-     *
      * 서비스에서 예외가 발생할 경우 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 500(Internal Server Error)
      * - 응답에 오류 메시지 포함
@@ -206,6 +215,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 1: 서비스 예외 발생 시 오류 응답 반환")
     void getLowestPriceByCategory_ShouldReturnErrorWhenServiceThrowsException() throws Exception {
+
         // given: 서비스 메서드가 예외를 던지도록 모킹
         when(brandService.getLowestPriceByCategory()).thenThrow(new RuntimeException("서비스 오류"));
 
@@ -215,11 +225,11 @@ public class ApiControllerTest {
                 .andExpect(status().isInternalServerError()) // 상태 코드 500 확인
                 .andExpect(jsonPath("$.error").exists()) // error 필드 존재 확인
                 .andExpect(jsonPath("$.message").value("서비스 오류")); // 오류 메시지 확인
+
     }
 
     /**
      * API 2: 단일 브랜드 최저 총액 조회 테스트
-     *
      * GET /api/lowest-total-price-brand 엔드포인트가 올바른 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 200(OK)
      * - 응답 JSON의 구조 및 필드 값이 예상대로인지 확인
@@ -227,6 +237,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 2: 단일 브랜드 최저 총액 조회")
     void getLowestTotalPriceBrand_ShouldReturnBrandWithLowestTotalPrice() throws Exception {
+
         // given: 서비스 메서드가 호출될 때 반환할 값을 모킹
         when(brandService.getLowestTotalPriceBrand()).thenReturn(lowestTotalPriceBrand);
 
@@ -241,11 +252,11 @@ public class ApiControllerTest {
 
         // 서비스 메서드가 정확히 한 번 호출되었는지 확인
         verify(brandService, times(1)).getLowestTotalPriceBrand();
+
     }
 
     /**
      * API 2: 서비스 예외 발생 시 오류 응답 반환 테스트
-     *
      * 서비스에서 예외가 발생할 경우 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 500(Internal Server Error)
      * - 응답에 오류 메시지 포함
@@ -253,6 +264,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 2: 서비스 예외 발생 시 오류 응답 반환")
     void getLowestTotalPriceBrand_ShouldReturnErrorWhenServiceThrowsException() throws Exception {
+
         // given: 서비스 메서드가 예외를 던지도록 모킹
         when(brandService.getLowestTotalPriceBrand()).thenThrow(new RuntimeException("서비스 오류"));
 
@@ -262,11 +274,11 @@ public class ApiControllerTest {
                 .andExpect(status().isInternalServerError()) // 상태 코드 500 확인
                 .andExpect(jsonPath("$.error").exists()) // error 필드 존재 확인
                 .andExpect(jsonPath("$.message").value("서비스 오류")); // 오류 메시지 확인
+
     }
 
     /**
      * API 3: 카테고리별 최저/최고 가격 브랜드 조회 테스트 (모든 카테고리 대상)
-     *
      * GET /api/min-max-price-by-category 엔드포인트가 올바른 응답을 반환하는지 검증한다.
      * @ParameterizedTest와 @EnumSource를 사용하여 모든 카테고리에 대해 테스트를 반복 실행한다.
      */
@@ -274,6 +286,7 @@ public class ApiControllerTest {
     @EnumSource(Category.class) // Category enum의 모든 값에 대해 테스트 반복
     @DisplayName("API 3: 카테고리별 최저/최고 가격 브랜드 조회 - 모든 카테고리 테스트")
     void getMinMaxPriceByCategory_ShouldReturnMinAndMaxPriceForAllCategories(Category category) throws Exception {
+
         // given: 테스트 데이터의 카테고리를 현재 테스트 중인 카테고리로 변경하고 서비스 모킹
         minMaxPriceByCategory.put("카테고리", category.getDisplayName());
         when(brandService.getMinMaxPriceByCategory(category)).thenReturn(minMaxPriceByCategory);
@@ -289,11 +302,11 @@ public class ApiControllerTest {
 
         // 서비스 메서드가 정확히 한 번 호출되었는지 확인
         verify(brandService, times(1)).getMinMaxPriceByCategory(category);
+
     }
 
     /**
      * API 3: 잘못된 카테고리명으로 조회 시 오류 반환 테스트
-     *
      * 유효하지 않은 카테고리명으로 요청 시 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 400(Bad Request)
      * - 응답에 오류 메시지 포함
@@ -301,6 +314,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 3: 잘못된 카테고리명으로 조회 시 오류 반환")
     void getMinMaxPriceByCategory_ShouldReturnErrorForInvalidCategory() throws Exception {
+
         // given: 서비스 메서드가 IllegalArgumentException을 던지도록 모킹
         when(brandService.getMinMaxPriceByCategory(any()))
                 .thenThrow(new IllegalArgumentException("잘못된 카테고리 이름: 존재하지않는카테고리"));
@@ -312,11 +326,11 @@ public class ApiControllerTest {
                 .andExpect(status().isBadRequest()) // 상태 코드 400 확인
                 .andExpect(jsonPath("$.error").value("잘못된 카테고리 이름")) // 오류 타입 확인
                 .andExpect(jsonPath("$.message").value(containsString("잘못된 카테고리 이름"))); // 오류 메시지 확인
+
     }
 
     /**
      * API 4: 브랜드 생성 테스트
-     *
      * POST /api/brand 엔드포인트가 새로운 브랜드를 올바르게 생성하는지 검증한다.
      * - HTTP 상태 코드 201(Created)
      * - 응답 JSON에 성공 상태 및 생성된 브랜드 ID 포함
@@ -324,6 +338,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 브랜드 생성")
     void createBrand_ShouldCreateNewBrand() throws Exception {
+
         // given: 테스트용 브랜드 DTO 생성 및 서비스 메서드 모킹
         BrandDto brandDto = createBrandDto("New Brand", 10000, 5000);
         Brand savedBrand = createBrand(3L, "New Brand", 10000, 5000);
@@ -342,11 +357,11 @@ public class ApiControllerTest {
 
         // 서비스 메서드가 정확히 한 번 호출되었는지 확인
         verify(brandService, times(1)).saveBrand(any(Brand.class));
+
     }
 
     /**
      * API 4: 브랜드 수정 테스트
-     *
      * PUT /api/brand/{id} 엔드포인트가 기존 브랜드를 올바르게 수정하는지 검증한다.
      * - HTTP 상태 코드 200(OK)
      * - 응답 JSON에 성공 상태 및 메시지 포함
@@ -354,6 +369,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 브랜드 수정")
     void updateBrand_ShouldUpdateExistingBrand() throws Exception {
+
         // given: 테스트용 브랜드 ID, DTO 및 서비스 메서드 모킹
         Long brandId = 1L;
         BrandDto brandDto = createBrandDto("Updated Brand", 10000, 5000);
@@ -375,11 +391,11 @@ public class ApiControllerTest {
         // 서비스 메서드 호출 확인
         verify(brandService, times(1)).getBrandById(brandId);
         verify(brandService, times(1)).saveBrand(any(Brand.class));
+
     }
 
     /**
      * API 4: 존재하지 않는 브랜드 수정 시 오류 반환 테스트
-     *
      * 존재하지 않는 브랜드 ID로 수정 요청 시 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 404(Not Found)
      * - 응답에 오류 메시지 포함
@@ -387,6 +403,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 존재하지 않는 브랜드 수정 시 오류 반환")
     void updateBrand_ShouldReturnErrorForNonExistingBrand() throws Exception {
+
         // given: 존재하지 않는 브랜드 ID, DTO 및 서비스 메서드 모킹
         Long brandId = 999L;
         BrandDto brandDto = createBrandDto("Non Existing Brand", 10000, 5000);
@@ -404,11 +421,11 @@ public class ApiControllerTest {
 
         // saveBrand가 호출되지 않아야 함
         verify(brandService, never()).saveBrand(any(Brand.class));
+
     }
 
     /**
      * API 4: 브랜드 삭제 테스트
-     *
      * DELETE /api/brand/{id} 엔드포인트가 브랜드를 올바르게 삭제하는지 검증한다.
      * - HTTP 상태 코드 200(OK)
      * - 응답 JSON에 성공 상태 및 메시지 포함
@@ -416,6 +433,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 브랜드 삭제")
     void deleteBrand_ShouldDeleteExistingBrand() throws Exception {
+
         // given: 테스트용 브랜드 ID 및 서비스 메서드 모킹
         Long brandId = 1L;
         when(brandService.getBrandById(brandId)).thenReturn(brandA);
@@ -431,11 +449,11 @@ public class ApiControllerTest {
         // 서비스 메서드 호출 확인
         verify(brandService, times(1)).getBrandById(brandId);
         verify(brandService, times(1)).deleteBrand(brandId);
+
     }
 
     /**
      * API 4: 존재하지 않는 브랜드 삭제 시 오류 반환 테스트
-     *
      * 존재하지 않는 브랜드 ID로 삭제 요청 시 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 404(Not Found)
      * - 응답에 오류 메시지 포함
@@ -443,6 +461,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 존재하지 않는 브랜드 삭제 시 오류 반환")
     void deleteBrand_ShouldReturnErrorForNonExistingBrand() throws Exception {
+
         // given: 존재하지 않는 브랜드 ID 및 서비스 메서드 모킹
         Long brandId = 999L;
         when(brandService.getBrandById(brandId)).thenReturn(null); // null 반환하여 브랜드 없음 표시
@@ -456,11 +475,11 @@ public class ApiControllerTest {
 
         // deleteBrand가 호출되지 않아야 함
         verify(brandService, never()).deleteBrand(anyLong());
+
     }
 
     /**
      * API 4: 브랜드 가격 업데이트 테스트
-     *
      * PUT /api/brand/price 엔드포인트가 브랜드의 특정 카테고리 가격을 올바르게 업데이트하는지 검증한다.
      * - HTTP 상태 코드 200(OK)
      * - 응답 JSON에 성공 상태 및 메시지 포함
@@ -468,6 +487,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 브랜드 가격 업데이트")
     void updateBrandPrice_ShouldUpdatePrice() throws Exception {
+
         // given: 테스트용 가격 업데이트 DTO 및 서비스 메서드 모킹
         BrandPriceUpdateDto updateDto = new BrandPriceUpdateDto();
         updateDto.setBrandName("A");
@@ -487,11 +507,11 @@ public class ApiControllerTest {
 
         // 서비스 메서드 호출 확인 (정확한 파라미터로 호출되었는지 검증)
         verify(brandService, times(1)).updateBrandPrice(eq("A"), eq(Category.TOP), eq(12000));
+
     }
 
     /**
      * API 4: 존재하지 않는 브랜드 가격 업데이트 시 오류 반환 테스트
-     *
      * 존재하지 않는 브랜드명으로 가격 업데이트 요청 시 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 404(Not Found)
      * - 응답에 오류 메시지 포함
@@ -499,6 +519,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 존재하지 않는 브랜드 가격 업데이트 시 오류 반환")
     void updateBrandPrice_ShouldReturnErrorForNonExistingBrand() throws Exception {
+
         // given: 존재하지 않는 브랜드명을 포함한 업데이트 DTO 및 서비스 메서드 모킹
         BrandPriceUpdateDto updateDto = new BrandPriceUpdateDto();
         updateDto.setBrandName("Z");
@@ -515,11 +536,11 @@ public class ApiControllerTest {
                 .andExpect(status().isNotFound()) // 상태 코드 404 확인
                 .andExpect(jsonPath("$.error").exists()) // error 필드 존재 확인
                 .andExpect(jsonPath("$.message").exists()); // message 필드 존재 확인
+
     }
 
     /**
      * API 4: 잘못된 카테고리로 가격 업데이트 시 오류 반환 테스트
-     *
      * 유효하지 않은 카테고리명으로 가격 업데이트 요청 시 컨트롤러가 적절한 오류 응답을 반환하는지 검증한다.
      * - HTTP 상태 코드 400(Bad Request)
      * - 응답에 오류 메시지 포함
@@ -527,6 +548,7 @@ public class ApiControllerTest {
     @Test
     @DisplayName("API 4: 잘못된 카테고리로 가격 업데이트 시 오류 반환")
     void updateBrandPrice_ShouldReturnErrorForInvalidCategory() throws Exception {
+
         // given: 유효하지 않은 카테고리명을 포함한 업데이트 DTO 및 서비스 메서드 모킹
         BrandPriceUpdateDto updateDto = new BrandPriceUpdateDto();
         updateDto.setBrandName("A");
@@ -544,11 +566,11 @@ public class ApiControllerTest {
                 .andExpect(status().isBadRequest()) // 상태 코드 400 확인
                 .andExpect(jsonPath("$.error").value("잘못된 카테고리 이름")) // 오류 타입 확인
                 .andExpect(jsonPath("$.message").exists()); // 메시지 필드 존재 확인
+
     }
 
     /**
      * BrandDto 객체 생성 헬퍼 메서드
-     *
      * 테스트에 사용할 BrandDto 객체를 생성한다.
      * @param name 브랜드명
      * @param topPrice 상의 가격
@@ -556,6 +578,7 @@ public class ApiControllerTest {
      * @return 생성된 BrandDto 객체
      */
     private BrandDto createBrandDto(String name, int topPrice, int outerPrice) {
+
         BrandDto brandDto = new BrandDto();
         brandDto.setName(name);
 
@@ -571,12 +594,13 @@ public class ApiControllerTest {
         }
 
         brandDto.setPrices(prices);
+
         return brandDto;
+
     }
 
     /**
      * Brand 객체 생성 헬퍼 메서드
-     *
      * 테스트에 사용할 Brand 객체를 생성한다.
      * @param id 브랜드 ID
      * @param name 브랜드명
@@ -585,6 +609,7 @@ public class ApiControllerTest {
      * @return 생성된 Brand 객체
      */
     private Brand createBrand(Long id, String name, int topPrice, int outerPrice) {
+
         Brand brand = new Brand();
         brand.setId(id);
         brand.setName(name);
@@ -601,6 +626,8 @@ public class ApiControllerTest {
         }
 
         brand.setPrices(prices);
+
         return brand;
     }
+
 }

@@ -8,20 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * 브랜드와 관련된 비즈니스 로직을 처리하는 서비스 클래스
- *
+ * 클래스 설명 : 브랜드와 관련된 비즈니스 로직을 처리하는 서비스 클래스
  * 무신사 코디 서비스의 핵심 비즈니스 로직을 구현하며, 브랜드 관리와 관련된 기능을 제공한다.
  * 데이터 접근을 위해 BrandRepository와 상호작용하고, 컨트롤러 계층에 필요한 데이터를 가공한다.
- *
  * 주요 기능:
  * 1. 브랜드 CRUD 작업 (생성, 조회, 수정, 삭제)
  * 2. 카테고리별 최저가격 브랜드와 상품가격, 총액 조회
  * 3. 단일 브랜드 최저 총액 조회
  * 4. 카테고리별 최저/최고 가격 브랜드 조회
  * 5. 초기 브랜드 데이터 설정
+ * 작성자 : sys1021
+ * 작성일 : 2025.03.02
  */
 @Service
 public class BrandService {
@@ -34,15 +33,16 @@ public class BrandService {
     private BrandRepository brandRepository;
 
     /**
-     * 애플리케이션 시작 시 초기 브랜드 데이터를 설정하는 메서드
-     *
+     * 메서드 설명 : 애플리케이션 시작 시 초기 브랜드 데이터를 설정하는 메서드
      * 데이터베이스에 브랜드가 없는 경우에만 기본 브랜드 데이터를 생성한다.
      * 브랜드 A부터 I까지 9개의 브랜드를 생성하고, 각 브랜드별로 8개 카테고리의 가격 정보를 설정한다.
-     *
      * @Transactional 어노테이션으로 트랜잭션 처리를 보장한다.
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     @Transactional
     public void initializeBrands() {
+
         // 초기 브랜드 데이터가 없을 경우에만 초기화
         if (brandRepository.count() == 0) {
             // 브랜드 A
@@ -162,42 +162,47 @@ public class BrandService {
             brandI.getPrices().put(Category.ACCESSORY, 2400);
             brandRepository.save(brandI);
         }
+
     }
 
     /**
-     * 모든 브랜드 목록을 조회하는 메서드
-     *
+     * 메서드 설명 : 모든 브랜드 목록을 조회하는 메서드
      * @return 모든 브랜드 목록
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public List<Brand> getAllBrands() {
         return brandRepository.findAll();
     }
 
     /**
-     * 특정 ID에 해당하는 브랜드를 조회하는 메서드
-     *
+     * 메서드 설명 : 특정 ID에 해당하는 브랜드를 조회하는 메서드
      * @param id 조회할 브랜드의 ID
      * @return 해당 ID의 브랜드 (존재하지 않는 경우 null)
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public Brand getBrandById(Long id) {
         return brandRepository.findById(id).orElse(null);
     }
 
     /**
-     * 특정 이름에 해당하는 브랜드를 조회하는 메서드
-     *
+     * 메서드 설명 : 특정 이름에 해당하는 브랜드를 조회하는 메서드
      * @param name 조회할 브랜드의 이름
      * @return 해당 이름의 브랜드 (존재하지 않는 경우 null)
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public Brand getBrandByName(String name) {
         return brandRepository.findByName(name);
     }
 
     /**
-     * 브랜드를 저장하는 메서드 (생성 또는 수정)
-     *
+     * 메서드 설명 : 브랜드를 저장하는 메서드 (생성 또는 수정)
      * @param brand 저장할 브랜드 객체
      * @return 저장된 브랜드 객체
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     @Transactional
     public Brand saveBrand(Brand brand) {
@@ -205,9 +210,10 @@ public class BrandService {
     }
 
     /**
-     * 브랜드를 삭제하는 메서드
-     *
+     * 메서드 설명 : 브랜드를 삭제하는 메서드
      * @param id 삭제할 브랜드의 ID
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     @Transactional
     public void deleteBrand(Long id) {
@@ -215,32 +221,34 @@ public class BrandService {
     }
 
     /**
-     * 특정 카테고리의 브랜드들을 가격 오름차순으로 조회하는 메서드
-     *
+     * 메서드 설명 : 특정 카테고리의 브랜드들을 가격 오름차순으로 조회하는 메서드
      * @param category 조회할 카테고리
      * @return 해당 카테고리의 브랜드들을 가격 오름차순으로 정렬한 목록
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public List<Brand> getBrandsByCategoryOrderByPriceAsc(Category category) {
         return brandRepository.findAllByCategoryOrderByPriceAsc(category);
     }
 
     /**
-     * 특정 카테고리의 브랜드들을 가격 내림차순으로 조회하는 메서드
-     *
+     * 메서드 설명 : 특정 카테고리의 브랜드들을 가격 내림차순으로 조회하는 메서드
      * @param category 조회할 카테고리
      * @return 해당 카테고리의 브랜드들을 가격 내림차순으로 정렬한 목록
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public List<Brand> getBrandsByCategoryOrderByPriceDesc(Category category) {
         return brandRepository.findAllByCategoryOrderByPriceDesc(category);
     }
 
     /**
-     * API 1: 카테고리별 최저가격 브랜드와 상품가격, 총액을 조회하는 메서드
-     *
+     * 메서드 설명 : API 1 카테고리별 최저가격 브랜드와 상품가격, 총액을 조회하는 메서드
      * 각 카테고리별로 최저 가격을 제공하는 브랜드와 가격 정보를 맵 형태로 반환한다.
      * 같은 최저가격을 제공하는 브랜드가 여러 개인 경우, 모든 브랜드를 콤마로 구분하여 표시한다.
-     *
      * @return 카테고리를 키로, 브랜드와 가격 정보를 값으로 하는 맵
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public Map<Category, Map<String, Object>> getLowestPriceByCategory() {
         Map<Category, Map<String, Object>> result = new HashMap<>();
@@ -271,18 +279,21 @@ public class BrandService {
                 result.put(category, categoryData);
             }
         }
+
         return result;
+
     }
 
     /**
-     * API 2: 단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격 브랜드를 조회하는 메서드
-     *
+     * 메서드 설명 : API 2 단일 브랜드로 모든 카테고리 상품을 구매할 때 최저가격 브랜드를 조회하는 메서드
      * 모든 브랜드를 검사하여 각 브랜드의 총 가격을 계산하고,
      * 그 중 최저 총액을 제공하는 브랜드와 카테고리별 가격, 총액 정보를 반환한다.
-     *
      * @return 최저 총액 브랜드 정보를 포함한 맵
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public Map<String, Object> getLowestTotalPriceBrand() {
+
         List<Brand> brands = getAllBrands();
         Brand lowestTotalPriceBrand = null;
         int lowestTotalPrice = Integer.MAX_VALUE;
@@ -322,13 +333,15 @@ public class BrandService {
         }
 
         return result;
+
     }
 
     /**
-     * 브랜드의 전체 카테고리 상품 가격 총액을 계산하는 내부 메서드
-     *
+     * 메서드 설명 : 브랜드의 전체 카테고리 상품 가격 총액을 계산하는 내부 메서드
      * @param brand 총액을 계산할 브랜드
      * @return 해당 브랜드의 모든 카테고리 상품 가격 총액
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     private int calculateTotalPrice(Brand brand) {
         // 스트림 API를 사용하여 모든 카테고리의 가격을 합산
@@ -336,15 +349,16 @@ public class BrandService {
     }
 
     /**
-     * API 3: 카테고리 이름으로 최저, 최고 가격 브랜드와 상품 가격을 조회하는 메서드
-     *
+     * 메서드 설명 : API 3 카테고리 이름으로 최저, 최고 가격 브랜드와 상품 가격을 조회하는 메서드
      * 지정된 카테고리에 대해 최저가 및 최고가 브랜드와 가격 정보를 조회한다.
      * 같은 가격을 제공하는 브랜드가 여러 개인 경우 모두 포함한다.
-     *
      * @param category 조회할 카테고리
      * @return 카테고리, 최저가, 최고가 정보를 포함한 맵
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     public Map<String, Object> getMinMaxPriceByCategory(Category category) {
+
         // 해당 카테고리의 브랜드를 가격 오름차순과 내림차순으로 조회
         List<Brand> brandsAsc = getBrandsByCategoryOrderByPriceAsc(category);
         List<Brand> brandsDesc = getBrandsByCategoryOrderByPriceDesc(category);
@@ -402,25 +416,30 @@ public class BrandService {
         }
 
         return result;
+
     }
 
     /**
-     * API 4: 브랜드 가격을 업데이트하는 메서드
-     *
+     * 메서드 설명 : API 4 브랜드 가격을 업데이트하는 메서드
      * 지정된 브랜드명과 카테고리에 해당하는 상품의 가격을 업데이트한다.
-     *
      * @param brandName 업데이트할 브랜드의 이름
      * @param category 업데이트할 카테고리
      * @param price 새로운 가격
      * @return 업데이트된 브랜드 객체 (브랜드가 존재하지 않는 경우 null)
+     * 작성자 : sys1021
+     * 작성일 : 2025.03.02
      */
     @Transactional
     public Brand updateBrandPrice(String brandName, Category category, int price) {
+
         Brand brand = getBrandByName(brandName);
         if (brand != null) {
             brand.getPrices().put(category, price);
             return brandRepository.save(brand);
         }
+
         return null;
+
     }
+
 }

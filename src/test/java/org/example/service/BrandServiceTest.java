@@ -20,11 +20,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
- * BrandService 클래스의 단위 테스트
- *
- * 이 테스트 클래스는 BrandService 클래스의 모든 메서드에 대한
- * 단위 테스트를 제공합니다. Mockito를 사용하여 BrandRepository의
- * 의존성을 모킹(mocking)하고, 서비스 로직을 독립적으로 테스트합니다.
+ * 클래스 설명 : BrandService 클래스의 단위 테스트
+ * 이 테스트 클래스는 BrandService 클래스의 모든 메서드에 대한 단위 테스트를 제공합니다.
+ * Mockito를 사용하여 BrandRepository의 의존성을 모킹(mocking)하고, 서비스 로직을 독립적으로 테스트합니다.
+ * 작성자 : sys1021
+ * 작성일 : 2025.03.02
  */
 @ExtendWith(MockitoExtension.class) // Mockito와 JUnit 5를 함께 사용하기 위한 확장 설정
 public class BrandServiceTest {
@@ -64,7 +64,6 @@ public class BrandServiceTest {
     /**
      * 브랜드 객체 생성을 위한 헬퍼 메서드
      * 각 카테고리별 가격을 설정하여 새로운 Brand 객체를 생성합니다.
-     *
      * @param id 브랜드 ID
      * @param name 브랜드 이름
      * @param top 상의 가격
@@ -79,6 +78,7 @@ public class BrandServiceTest {
      */
     private Brand createBrand(Long id, String name, int top, int outer, int pants, int sneakers,
                               int bag, int hat, int socks, int accessory) {
+
         Brand brand = new Brand();
         brand.setId(id);
         brand.setName(name);
@@ -93,6 +93,7 @@ public class BrandServiceTest {
         brand.getPrices().put(Category.ACCESSORY, accessory);
 
         return brand;
+
     }
 
     /**
@@ -102,6 +103,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("모든 브랜드 조회")
     void getAllBrands_ShouldReturnAllBrands() {
+
         // given: 테스트 조건 설정
         when(brandRepository.findAll()).thenReturn(allBrands);
 
@@ -116,6 +118,7 @@ public class BrandServiceTest {
 
         // 메서드 호출 검증
         verify(brandRepository, times(1)).findAll();
+
     }
 
     /**
@@ -125,6 +128,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("ID로 브랜드 조회 - 존재하는 경우")
     void getBrandById_ShouldReturnBrandWhenExists() {
+
         // given
         when(brandRepository.findById(1L)).thenReturn(Optional.of(brandA));
 
@@ -137,6 +141,7 @@ public class BrandServiceTest {
         assertEquals(1L, result.getId(), "브랜드 ID가 1이어야 합니다");
 
         verify(brandRepository, times(1)).findById(1L);
+
     }
 
     /**
@@ -146,6 +151,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("ID로 브랜드 조회 - 존재하지 않는 경우")
     void getBrandById_ShouldReturnNullWhenNotExists() {
+
         // given
         when(brandRepository.findById(99L)).thenReturn(Optional.empty());
 
@@ -156,6 +162,7 @@ public class BrandServiceTest {
         assertNull(result, "존재하지 않는 ID로 조회 시 null을 반환해야 합니다");
 
         verify(brandRepository, times(1)).findById(99L);
+
     }
 
     /**
@@ -165,6 +172,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("이름으로 브랜드 조회")
     void getBrandByName_ShouldReturnBrandWhenExists() {
+
         // given
         when(brandRepository.findByName("A")).thenReturn(brandA);
 
@@ -177,6 +185,7 @@ public class BrandServiceTest {
         assertEquals("A", result.getName(), "브랜드명이 A여야 합니다");
 
         verify(brandRepository, times(1)).findByName("A");
+
     }
 
     /**
@@ -186,6 +195,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("브랜드 저장")
     void saveBrand_ShouldSaveBrand() {
+
         // given
         Brand newBrand = new Brand();
         newBrand.setName("D");
@@ -200,6 +210,7 @@ public class BrandServiceTest {
         assertEquals("D", result.getName(), "저장된 브랜드명이 D여야 합니다");
 
         verify(brandRepository, times(1)).save(newBrand);
+
     }
 
     /**
@@ -209,6 +220,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("브랜드 삭제")
     void deleteBrand_ShouldDeleteBrand() {
+
         // given
         Long brandId = 1L;
         doNothing().when(brandRepository).deleteById(brandId);
@@ -218,6 +230,7 @@ public class BrandServiceTest {
 
         // then
         verify(brandRepository, times(1)).deleteById(brandId);
+
     }
 
     /**
@@ -227,6 +240,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("특정 카테고리의 최저가격 브랜드 조회")
     void getBrandsByCategoryOrderByPriceAsc_ShouldReturnBrandsOrderedByPrice() {
+
         // given
         when(brandRepository.findAllByCategoryOrderByPriceAsc(Category.TOP))
                 .thenReturn(Arrays.asList(brandC, brandB, brandA)); // C의 TOP 가격이 가장 낮음
@@ -241,6 +255,7 @@ public class BrandServiceTest {
         assertEquals("A", result.get(2).getName(), "세 번째(최고가) 브랜드명이 A여야 합니다");
 
         verify(brandRepository, times(1)).findAllByCategoryOrderByPriceAsc(Category.TOP);
+
     }
 
     /**
@@ -250,6 +265,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("특정 카테고리의 최고가격 브랜드 조회")
     void getBrandsByCategoryOrderByPriceDesc_ShouldReturnBrandsOrderedByPrice() {
+
         // given
         when(brandRepository.findAllByCategoryOrderByPriceDesc(Category.TOP))
                 .thenReturn(Arrays.asList(brandA, brandB, brandC)); // A의 TOP 가격이 가장 높음
@@ -264,6 +280,7 @@ public class BrandServiceTest {
         assertEquals("C", result.get(2).getName(), "세 번째(최저가) 브랜드명이 C여야 합니다");
 
         verify(brandRepository, times(1)).findAllByCategoryOrderByPriceDesc(Category.TOP);
+
     }
 
     /**
@@ -273,6 +290,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 1: 카테고리별 최저가격 조회")
     void getLowestPriceByCategory_ShouldReturnLowestPriceForEachCategory() {
+
         // 각 카테고리별로 최저가 브랜드 모킹
         for (Category category : Category.values()) {
             List<Brand> brandsForCategory;
@@ -314,6 +332,7 @@ public class BrandServiceTest {
         for (Category category : Category.values()) {
             verify(brandRepository, times(1)).findAllByCategoryOrderByPriceAsc(category);
         }
+
     }
 
     /**
@@ -324,6 +343,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 2: 단일 브랜드 최저 총액 조회")
     void getLowestTotalPriceBrand_ShouldReturnBrandWithLowestTotalPrice() {
+
         // given
         when(brandRepository.findAll()).thenReturn(allBrands);
 
@@ -353,6 +373,7 @@ public class BrandServiceTest {
         }
 
         verify(brandRepository, times(1)).findAll();
+
     }
 
     /**
@@ -362,6 +383,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 2: 브랜드별 총액 계산 및 최저가 브랜드 선택 로직 검증")
     void getLowestTotalPriceBrand_ShouldSelectCorrectBrand() {
+
         // given
         // 각 브랜드의 실제 총액을 계산:
         // 브랜드 A의 총액: 11200 + 5500 + 4200 + 9000 + 2000 + 1700 + 1800 + 2300 = 37700
@@ -382,6 +404,7 @@ public class BrandServiceTest {
         assertEquals(37100, totalPrice, "최저 총액은 37,100이어야 합니다");
 
         verify(brandRepository, times(1)).findAll();
+
     }
 
     /**
@@ -392,6 +415,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 3: 카테고리별 최저/최고 가격 브랜드 조회")
     void getMinMaxPriceByCategory_ShouldReturnMinAndMaxPriceForCategory() {
+
         // given
         when(brandRepository.findAllByCategoryOrderByPriceAsc(Category.TOP))
                 .thenReturn(Arrays.asList(brandC, brandB, brandA)); // 최저가: C
@@ -430,6 +454,7 @@ public class BrandServiceTest {
 
         verify(brandRepository, times(1)).findAllByCategoryOrderByPriceAsc(Category.TOP);
         verify(brandRepository, times(1)).findAllByCategoryOrderByPriceDesc(Category.TOP);
+
     }
 
     /**
@@ -439,6 +464,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 3: 동일 최저가 브랜드 처리 확인")
     void getMinMaxPriceByCategory_ShouldHandleSamePriceBrands() {
+
         // given
         // 최저가가 동일한 브랜드 (B와 C)
         Brand brandB_copy = createBrand(2L, "B", 10000, 5900, 3800, 9100, 2100, 2000, 2000, 2200);
@@ -475,6 +501,7 @@ public class BrandServiceTest {
                 .collect(Collectors.toList());
         assertTrue(maxPriceBrands.contains("A"), "최고가 브랜드 목록에 A가 포함되어야 합니다");
         assertTrue(maxPriceBrands.contains("D"), "최고가 브랜드 목록에 D가 포함되어야 합니다");
+
     }
 
     /**
@@ -484,6 +511,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 4: 브랜드 가격 업데이트 - 존재하는 브랜드")
     void updateBrandPrice_ShouldUpdatePriceWhenBrandExists() {
+
         // given
         when(brandRepository.findByName("A")).thenReturn(brandA);
         when(brandRepository.save(any(Brand.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -505,6 +533,7 @@ public class BrandServiceTest {
 
         // 다른 카테고리 가격은 변경되지 않아야 함
         assertEquals(5500, savedBrand.getPrices().get(Category.OUTER), "OUTER 카테고리 가격이 변경되지 않아야 합니다");
+
     }
 
     /**
@@ -514,6 +543,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("API 4: 브랜드 가격 업데이트 - 존재하지 않는 브랜드")
     void updateBrandPrice_ShouldReturnNullWhenBrandNotExists() {
+
         // given
         when(brandRepository.findByName("Z")).thenReturn(null);
 
@@ -524,6 +554,7 @@ public class BrandServiceTest {
         assertNull(result, "존재하지 않는 브랜드 이름으로 가격 업데이트 시 null을 반환해야 합니다");
 
         verify(brandRepository, never()).save(any(Brand.class));
+
     }
 
     /**
@@ -533,6 +564,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("브랜드 초기화 - 설정된 브랜드가 없는 경우")
     void initializeBrands_ShouldCreateBrandsWhenNoneExist() {
+
         // given
         when(brandRepository.count()).thenReturn(0L);
         when(brandRepository.save(any(Brand.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -543,6 +575,7 @@ public class BrandServiceTest {
         // then
         // 9개 브랜드(A-I)가 생성되어야 함
         verify(brandRepository, times(9)).save(any(Brand.class));
+
     }
 
     /**
@@ -552,6 +585,7 @@ public class BrandServiceTest {
     @Test
     @DisplayName("브랜드 초기화 - 이미 브랜드가 있는 경우")
     void initializeBrands_ShouldNotCreateBrandsWhenAlreadyExist() {
+
         // given
         when(brandRepository.count()).thenReturn(9L);
 
@@ -561,5 +595,7 @@ public class BrandServiceTest {
         // then
         // 이미 브랜드가 있으므로 save가 호출되지 않아야 함
         verify(brandRepository, never()).save(any(Brand.class));
+
     }
+
 }
