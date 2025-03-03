@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
      * @param ex 발생한 HttpMessageNotReadableException 예외 객체
      * @return 오류 정보를 담은 ResponseEntity 객체
      * 작성자 : sys1021
-     * 작성일 : 2025.03.02
+     * 작성일 : 2025.03.03
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex) {
@@ -65,7 +65,7 @@ public class GlobalExceptionHandler {
      * @param ex 발생한 IllegalArgumentException 예외 객체
      * @return 오류 정보를 담은 ResponseEntity 객체
      * 작성자 : sys1021
-     * 작성일 : 2025.03.02
+     * 작성일 : 2025.03.03
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex) {
@@ -88,7 +88,7 @@ public class GlobalExceptionHandler {
      * @param ex 발생한 Exception 예외 객체
      * @return 오류 정보를 담은 ResponseEntity 객체
      * 작성자 : sys1021
-     * 작성일 : 2025.03.02
+     * 작성일 : 2025.03.03
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
